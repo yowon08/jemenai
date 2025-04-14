@@ -22,7 +22,7 @@ def ask_gemini():
     if not text:
         return jsonify({"error": "Missing 'text' field"}), 400
 
-    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro-002:generateContent?key={API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={API_KEY}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [
