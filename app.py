@@ -22,7 +22,8 @@ def ask_gemini():
     if not text:
         return jsonify({"error": "Missing 'text' field"}), 400
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/chat-bison-001:generateContent?key={API_KEY}"
+    # ✅ 모델 URL 수정
+    url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={API_KEY}"
     headers = {"Content-Type": "application/json"}
     payload = {
         "contents": [
@@ -36,7 +37,7 @@ def ask_gemini():
 
     try:
         response_json = response.json()
-        # 오류 처리
+
         if "candidates" not in response_json:
             return jsonify({
                 "error": "Gemini 응답 파싱 실패",
