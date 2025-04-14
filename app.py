@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
+import os
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 app = Flask(__name__)
 
