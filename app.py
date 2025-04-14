@@ -1,40 +1,17 @@
-from flask import Flask, request, jsonify
-import requests
 import os
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-GEMINI_API_KEY = 'AI_STUDIO_API_KEY'  # AI Studio에서 받은 키
+@app.route('/check-api-key', methods=['GET'])
+def check_api_key():
+    # 환경 변수에서 API 키 읽기
+    api_key = os.getenv("GEMINI_API_KEY")
+    
+    if api_key is None:
+        return jsonify({"error": "API key is not set in environment variables."}), 400
+    else:
+        return jsonify({"message": "API key successfully loaded.", "api_key": api_key}), 200
 
-@app.route('/gemini', methods=['POST'])
-def gemini_proxy():
-    user_input = request.json.get('prompt')
-
-    headers = {
-        'Content-Type': 'application/json'
-    }
-
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {
-                        "text": user_input
-                    }
-                ]
-            }
-        ]
-    }
-
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-
-    res = requests.post(url, headers=headers, json=payload)
-    data = res.json()
-
-    try:
-        reply = data['candidates'][0]['content']['parts'][0]['text']
-    except Exception as e:
-        reply = f"Gemini 응답 파싱 실패: {e}\n전체 응답: {data}"
-
-    return jsonify({"response": reply})
+if __name__ == "__main__":
+    app.run(debug=True)
